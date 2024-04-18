@@ -1,0 +1,46 @@
+{
+  "name": "nodejs-back-end",
+  "version": "1.0.0",
+  "description": "qubid living backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qubed-Living/nodejs-back-end.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Qubed-Living/nodejs-back-end/issues"
+  },
+  "homepage": "https://github.com/Qubed-Living/nodejs-back-end#readme",
+  "dependencies": {
+    "agenda": "^5.0.0",
+    "axios": "^1.6.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
+    "mongodb": "^4.13.0",
+    "mongoose": "^7.3.4",
+    "node-cron": "^3.0.2",
+    "nodemailer": "^6.9.1",
+    "stripe": "^13.10.0",
+    "swagger-ui-express": "^4.6.3",
+    "twilio": "^4.10.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
+    "nodemon": "^3.0.1"
+  }
+}

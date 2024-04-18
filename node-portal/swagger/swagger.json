@@ -1,0 +1,3271 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Backend Apis",
+    "description": "API documentation for managing hotel booking requirement"
+  },
+  "basePath": "/api",
+  "schemes": ["http", "https"],
+  "paths": {
+    "/room/all": {
+      "get": {
+        "summary": "Get all rooms",
+        "parameters": [
+          {
+            "name": "propertyKey",
+            "in": "query",
+            "description": "Property key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Room"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/properties/all": {
+      "get": {
+        "summary": "Get all properties",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Property"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/countries/all": {
+    "get": {
+      "summary": "Get all country names",
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "boolean"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Country"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/login": {
+    "post": {
+       "tags": [
+          "Admin"
+        ],
+      "summary": "Admin login",
+      "consumes": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "Credentials",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/AdminLoginRequest"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "boolean"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "$ref": "#/definitions/User"
+                  },
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+    "/admin/dailyfinancialreports/{date}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Daily Financial Report",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "Date in the format 'YYYY-MM-DD'. Also provide token by clicking the lock icon in the header and provide token in modal input like this: 'Bearer {token}'",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FinancialReportResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/monthlytaxreport/{date}": {
+      "get": {
+        "tags":[
+          "Admin"
+        ],
+        "summary": "Get monthly tax report by date",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "The date in the format 'YYYY-MM-DD'",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+         "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "description": "Status of the request"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Date of the tax report"
+                          },
+                          "chargebeforetaxes": {
+                            "type": "string",
+                            "description": "Charge before taxes"
+                          },
+                          "kstandard": {
+                            "type": "string",
+                            "description": "K Standard amount"
+                          },
+                          "single": {
+                            "type": "string",
+                            "description": "Single amount"
+                          },
+                          "queen": {
+                            "type": "string",
+                            "description": "Queen amount"
+                          },
+                          "weeklySingle": {
+                            "type": "string",
+                            "description": "Weekly Single amount"
+                          },
+                          "standard": {
+                            "type": "string",
+                            "description": "Standard amount"
+                          },
+                          "newtaxtype": {
+                            "type": "string",
+                            "description": "New tax type amount"
+                          },
+                          "kingsuiteweekly": {
+                            "type": "string",
+                            "description": "King Suite Weekly amount"
+                          },
+                          "doubledaily": {
+                            "type": "string",
+                            "description": "Double Daily amount"
+                          },
+                          "doubleweekly": {
+                            "type": "string",
+                            "description": "Double Weekly amount"
+                          },
+                          "singleQueenDaily": {
+                            "type": "string",
+                            "description": "Single Queen Daily amount"
+                          },
+                          "singleQueenWeekly": {
+                            "type": "string",
+                            "description": "Single Queen Weekly amount"
+                          },
+                          "taxTotal": {
+                            "type": "string",
+                            "description": "Total tax amount"
+                          },
+                          "taxExemptTotal": {
+                            "type": "string",
+                            "description": "Total tax exempt amount"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/admin/monthlysalesreport/{date}": {
+      "get": {
+        "tags":[
+          "Admin"
+        ],
+        "summary": "Get monthly sales report by date",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "The date in the format 'YYYY-MM-DD'",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "description": "Status of the request"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "integer",
+                            "description": "Name"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description"
+                          },
+                          "_": {
+                            "type": "string",
+                            "description": "_"
+                          },
+                          "percentage": {
+                            "type": "string",
+                            "description": "Percentage"
+                          },
+                          "nights": {
+                            "type": "string",
+                            "description": "Nights"
+                          },
+                          "room": {
+                            "type": "string",
+                            "description": "Room"
+                          },
+                          "other": {
+                            "type": "string",
+                            "description": "Other"
+                          },
+                          "tax": {
+                            "type": "string",
+                            "description": "Tax"
+                          },
+                          "total": {
+                            "type": "string",
+                            "description": "Total"
+                          },
+                          "payment": {
+                            "type": "string",
+                            "description": "Payment"
+                          },
+                          "balance": {
+                            "type": "string",
+                            "description": "Balance"
+                          },
+                          "cancel": {
+                            "type": "string",
+                            "description": "Cancel"
+                          },
+                          "avgstay": {
+                            "type": "string",
+                            "description": "Average Stay"
+                          },
+                          "adr": {
+                            "type": "string",
+                            "description": "ADR"
+                          },
+                          "revpar": {
+                            "type": "string",
+                            "description": "RevPAR"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+           "401": {
+            "description": "Access denied. No token provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Access denied. No token provided."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/summaryreport/{date}": {
+      "get": {
+        "tags":[
+          "Admin"
+        ],
+        "summary": "Get summary report",
+        "description": "Retrieves the summary report for the specified date.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "The date of the summary report (e.g., '2023-05-25')",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryReportResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access denied. No token provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Access denied. No token provided."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/availableRooms/{date}": {
+      "get": {
+        "summary": "Get available rooms",
+        "description": "Retrieves the available rooms for the specified date.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "The date for which to retrieve available rooms (e.g., '2023-05-25')",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailableRoomsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/getBookingsByDate": {
+      "get": {
+        "tags":[
+            "Admin"
+        ],
+        "summary": "Get bookings by date",
+        "description": "Retrieve bookings based on the provided date",
+        "parameters": [
+          {
+            "name": "currentDate",
+            "in": "query",
+            "description": "The date in 'YYYY-MM-DD' format",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "description": "Indicates the success status of the response"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "totalArrivals": {
+                      "type": "integer",
+                      "description": "Total number of arrivals for the provided date"
+                    },
+                    "totalDeparture": {
+                      "type": "integer",
+                      "description": "Total number of departures for the provided date"
+                    },
+                    "totalAccommodationBooked": {
+                      "type": "integer",
+                      "description": "Total number of accommodations booked for the provided date"
+                    },
+                    "todayBookings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Booking ID"
+                          },
+                          "userKey": {
+                            "type": "string",
+                            "description": "User ID"
+                          },
+                          "bookingID": {
+                            "type": "integer",
+                            "description": "Booking ID"
+                          },
+                          "roomNumber": {
+                            "type": "integer",
+                            "description": "Room number"
+                          },
+                          "noOfRooms": {
+                            "type": "integer",
+                            "description": "Number of rooms booked"
+                          },
+                          "noOfPerson": {
+                            "type": "integer",
+                            "description": "Total number of persons"
+                          },
+                          "noOfAdults": {
+                            "type": "integer",
+                            "description": "Number of adults"
+                          },
+                          "noOfChildren": {
+                            "type": "integer",
+                            "description": "Number of children"
+                          },
+                          "fairPrice": {
+                            "type": "string",
+                            "description": "Fair price"
+                          },
+                          "discount": {
+                            "type": "string",
+                            "description": "Discount"
+                          },
+                          "roomTotal": {
+                            "type": "integer",
+                            "description": "Room total"
+                          },
+                          "totalTax": {
+                            "type": "number",
+                            "description": "Total tax"
+                          },
+                          "totalFees": {
+                            "type": "integer",
+                            "description": "Total fees"
+                          },
+                          "totalPrice": {
+                            "type": "number",
+                            "description": "Total price"
+                          },
+                          "bookingStatus": {
+                            "type": "string",
+                            "description": "Booking status"
+                          },
+                          "paymentStatus": {
+                            "type": "string",
+                            "description": "Payment status"
+                          },
+                          "bookingDate": {
+                            "type": "string",
+                            "description": "Booking date"
+                          },
+                          "checkInDate": {
+                            "type": "string",
+                            "description": "Check-in date"
+                          },
+                          "checkOutDate": {
+                            "type": "string",
+                            "description": "Check-out date"
+                          },
+                          "totalDays": {
+                            "type": "integer",
+                            "description": "Total number of days"
+                          },
+                          "additionalGuest": {
+                            "type": "object",
+                            "properties": {
+                              "firstName": {
+                                "type": "string",
+                                "description": "Additional guest's first name"
+                              },
+                              "lastName": {
+                                "type": "string",
+                                "description": "Additional guest's last name"
+                              },
+                              "emailAddress": {
+                                "type": "string",
+                                "description": "Additional guest's email address"
+                              },
+                              "phoneNumber": {
+                                "type": "string",
+                                "description": "Additional guest's phone number"
+                              },
+                              "country": {
+                                "type": "string",
+                                "description": "Additional guest's country"
+                              }
+                            }
+                          },
+                          "roomKeys": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "Room key ID"
+                                },
+                                "noOfRooms": {
+                                  "type": "integer",
+                                  "description": "Number of rooms"
+                                }
+                              }
+                            }
+                          },
+                          "userInfo": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "description": "User ID"
+                              },
+                              "firstName": {
+                                "type": "string",
+                                "description": "User's first name"
+                              },
+                              "lastName": {
+                                "type": "string",
+                                "description": "User's last name"
+                              },
+                              "emailAddress": {
+                                "type": "string",
+                                "description": "User's email address"
+                              },
+                              "phoneNumber": {
+                                "type": "string",
+                                "description": "User's phone number"
+                              },
+                              "country": {
+                                "type": "string",
+                                "description": "User's country"
+                              },
+                              "billingAddress": {
+                                "type": "object",
+                                "properties": {
+                                  "zipcode": {
+                                    "type": "string",
+                                    "description": "Billing address zipcode"
+                                  },
+                                  "address1": {
+                                    "type": "string",
+                                    "description": "Billing address line 1"
+                                  },
+                                  "address2": {
+                                    "type": "string",
+                                    "description": "Billing address line 2"
+                                  },
+                                  "city": {
+                                    "type": "string",
+                                    "description": "Billing address city"
+                                  },
+                                  "state": {
+                                    "type": "string",
+                                    "description": "Billing address state"
+                                  },
+                                  "country": {
+                                    "type": "string",
+                                    "description": "Billing address country"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "roomsInfo": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "description": "Room ID"
+                                },
+                                "roomName": {
+                                  "type": "string",
+                                  "description": "Room name"
+                                },
+                                "minimumNightStays": {
+                                  "type": "integer",
+                                  "description": "Minimum number of night stays"
+                                },
+                                "maximumOccupancy": {
+                                  "type": "integer",
+                                  "description": "Maximum occupancy"
+                                },
+                                "pricePerNight": {
+                                  "type": "integer",
+                                  "description": "Price per night"
+                                },
+                                "totalNumberOfRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of rooms"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "description": "Room description"
+                                },
+                                "amenities": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "description": "Room amenities"
+                                  }
+                                },
+                                "images": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "imageKey": {
+                                        "type": "string",
+                                        "description": "Image key"
+                                      },
+                                      "imagePath": {
+                                        "type": "string",
+                                        "description": "Image path"
+                                      }
+                                    }
+                                  }
+                                },
+                                "totalNumberOfBookedRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of booked rooms"
+                                },
+                                "totalNOfRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of rooms"
+                                },
+                                "iconName": {
+                                  "type": "string",
+                                  "description": "Icon name"
+                                },
+                                "propertyKey": {
+                                  "type": "string",
+                                  "description": "Property key"
+                                },
+                                "roomType": {
+                                  "type": "string",
+                                  "description": "Room type"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access denied. No token provided."
+          }
+        }
+      }
+    },
+    "/admin/getBookingsByMonth": {
+      "get": {
+        "tags":[
+            "Admin"
+        ],
+        "summary": "Get bookings by Month",
+        "description": "Retrieve monthly bookings based on the provided date",
+        "parameters": [
+          {
+            "name": "currentDate",
+            "in": "query",
+            "description": "The date in 'YYYY-MM-DD' format",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "description": "Indicates the success status of the response"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "totalArrivals": {
+                      "type": "integer",
+                      "description": "Total number of arrivals for the provided date"
+                    },
+                    "totalDeparture": {
+                      "type": "integer",
+                      "description": "Total number of departures for the provided date"
+                    },
+                    "totalAccommodationBooked": {
+                      "type": "integer",
+                      "description": "Total number of accommodations booked for the provided date"
+                    },
+                    "todayBookings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Booking ID"
+                          },
+                          "userKey": {
+                            "type": "string",
+                            "description": "User ID"
+                          },
+                          "bookingID": {
+                            "type": "integer",
+                            "description": "Booking ID"
+                          },
+                          "roomNumber": {
+                            "type": "integer",
+                            "description": "Room number"
+                          },
+                          "noOfRooms": {
+                            "type": "integer",
+                            "description": "Number of rooms booked"
+                          },
+                          "noOfPerson": {
+                            "type": "integer",
+                            "description": "Total number of persons"
+                          },
+                          "noOfAdults": {
+                            "type": "integer",
+                            "description": "Number of adults"
+                          },
+                          "noOfChildren": {
+                            "type": "integer",
+                            "description": "Number of children"
+                          },
+                          "fairPrice": {
+                            "type": "string",
+                            "description": "Fair price"
+                          },
+                          "discount": {
+                            "type": "string",
+                            "description": "Discount"
+                          },
+                          "roomTotal": {
+                            "type": "integer",
+                            "description": "Room total"
+                          },
+                          "totalTax": {
+                            "type": "number",
+                            "description": "Total tax"
+                          },
+                          "totalFees": {
+                            "type": "integer",
+                            "description": "Total fees"
+                          },
+                          "totalPrice": {
+                            "type": "number",
+                            "description": "Total price"
+                          },
+                          "bookingStatus": {
+                            "type": "string",
+                            "description": "Booking status"
+                          },
+                          "paymentStatus": {
+                            "type": "string",
+                            "description": "Payment status"
+                          },
+                          "bookingDate": {
+                            "type": "string",
+                            "description": "Booking date"
+                          },
+                          "checkInDate": {
+                            "type": "string",
+                            "description": "Check-in date"
+                          },
+                          "checkOutDate": {
+                            "type": "string",
+                            "description": "Check-out date"
+                          },
+                          "totalDays": {
+                            "type": "integer",
+                            "description": "Total number of days"
+                          },
+                          "additionalGuest": {
+                            "type": "object",
+                            "properties": {
+                              "firstName": {
+                                "type": "string",
+                                "description": "Additional guest's first name"
+                              },
+                              "lastName": {
+                                "type": "string",
+                                "description": "Additional guest's last name"
+                              },
+                              "emailAddress": {
+                                "type": "string",
+                                "description": "Additional guest's email address"
+                              },
+                              "phoneNumber": {
+                                "type": "string",
+                                "description": "Additional guest's phone number"
+                              },
+                              "country": {
+                                "type": "string",
+                                "description": "Additional guest's country"
+                              }
+                            }
+                          },
+                          "roomKeys": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "Room key ID"
+                                },
+                                "noOfRooms": {
+                                  "type": "integer",
+                                  "description": "Number of rooms"
+                                }
+                              }
+                            }
+                          },
+                          "userInfo": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "description": "User ID"
+                              },
+                              "firstName": {
+                                "type": "string",
+                                "description": "User's first name"
+                              },
+                              "lastName": {
+                                "type": "string",
+                                "description": "User's last name"
+                              },
+                              "emailAddress": {
+                                "type": "string",
+                                "description": "User's email address"
+                              },
+                              "phoneNumber": {
+                                "type": "string",
+                                "description": "User's phone number"
+                              },
+                              "country": {
+                                "type": "string",
+                                "description": "User's country"
+                              },
+                              "billingAddress": {
+                                "type": "object",
+                                "properties": {
+                                  "zipcode": {
+                                    "type": "string",
+                                    "description": "Billing address zipcode"
+                                  },
+                                  "address1": {
+                                    "type": "string",
+                                    "description": "Billing address line 1"
+                                  },
+                                  "address2": {
+                                    "type": "string",
+                                    "description": "Billing address line 2"
+                                  },
+                                  "city": {
+                                    "type": "string",
+                                    "description": "Billing address city"
+                                  },
+                                  "state": {
+                                    "type": "string",
+                                    "description": "Billing address state"
+                                  },
+                                  "country": {
+                                    "type": "string",
+                                    "description": "Billing address country"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "roomsInfo": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "description": "Room ID"
+                                },
+                                "roomName": {
+                                  "type": "string",
+                                  "description": "Room name"
+                                },
+                                "minimumNightStays": {
+                                  "type": "integer",
+                                  "description": "Minimum number of night stays"
+                                },
+                                "maximumOccupancy": {
+                                  "type": "integer",
+                                  "description": "Maximum occupancy"
+                                },
+                                "pricePerNight": {
+                                  "type": "integer",
+                                  "description": "Price per night"
+                                },
+                                "totalNumberOfRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of rooms"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "description": "Room description"
+                                },
+                                "amenities": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "description": "Room amenities"
+                                  }
+                                },
+                                "images": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "imageKey": {
+                                        "type": "string",
+                                        "description": "Image key"
+                                      },
+                                      "imagePath": {
+                                        "type": "string",
+                                        "description": "Image path"
+                                      }
+                                    }
+                                  }
+                                },
+                                "totalNumberOfBookedRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of booked rooms"
+                                },
+                                "totalNOfRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of rooms"
+                                },
+                                "iconName": {
+                                  "type": "string",
+                                  "description": "Icon name"
+                                },
+                                "propertyKey": {
+                                  "type": "string",
+                                  "description": "Property key"
+                                },
+                                "roomType": {
+                                  "type": "string",
+                                  "description": "Room type"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access denied. No token provided."
+          }
+        }
+      }
+    },
+     "/admin/getBookingsQuaterly": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get quarterly booking information",
+        "parameters": [
+          {
+            "name": "currentDate",
+            "in": "query",
+            "description": "Current date (YYYY-MM-DD)",
+            "required": true,
+            "type": "string",
+            "format": "date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "description": "Status of the API call"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "totalArrivals": {
+                      "type": "integer",
+                      "description": "Total number of arrivals"
+                    },
+                    "totalAccommodationBooked": {
+                      "type": "integer",
+                      "description": "Total number of accommodations booked"
+                    },
+                    "todayBookings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Booking ID"
+                          },
+                          "userKey": {
+                            "type": "string",
+                            "description": "User key"
+                          },
+                          "bookingID": {
+                            "type": "integer",
+                            "description": "Booking ID"
+                          },
+                          "roomNumber": {
+                            "type": "integer",
+                            "description": "Room number"
+                          },
+                          "noOfRooms": {
+                            "type": "integer",
+                            "description": "Number of rooms"
+                          },
+                          "noOfPerson": {
+                            "type": "integer",
+                            "description": "Number of persons"
+                          },
+                          "noOfAdults": {
+                            "type": "integer",
+                            "description": "Number of adults"
+                          },
+                          "noOfChildren": {
+                            "type": "integer",
+                            "description": "Number of children"
+                          },
+                          "fairPrice": {
+                            "type": "string",
+                            "description": "Fair price"
+                          },
+                          "discount": {
+                            "type": "string",
+                            "description": "Discount"
+                          },
+                          "roomTotal": {
+                            "type": "integer",
+                            "description": "Room total"
+                          },
+                          "totalTax": {
+                            "type": "number",
+                            "description": "Total tax"
+                          },
+                          "totalFees": {
+                            "type": "integer",
+                            "description": "Total fees"
+                          },
+                          "totalPrice": {
+                            "type": "number",
+                            "description": "Total price"
+                          },
+                          "bookingStatus": {
+                            "type": "string",
+                            "description": "Booking status"
+                          },
+                          "paymentStatus": {
+                            "type": "string",
+                            "description": "Payment status"
+                          },
+                          "bookingDate": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Booking date"
+                          },
+                          "checkInDate": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Check-in date"
+                          },
+                          "checkOutDate": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Check-out date"
+                          },
+                          "totalDays": {
+                            "type": "integer",
+                            "description": "Total number of days"
+                          },
+                          "additionalGuest": {
+                            "type": "object",
+                            "properties": {
+                              "firstName": {
+                                "type": "string",
+                                "description": "Additional guest's first name"
+                              },
+                              "lastName": {
+                                "type": "string",
+                                "description": "Additional guest's last name"
+                              },
+                              "emailAddress": {
+                                "type": "string",
+                                "description": "Additional guest's email address"
+                              },
+                              "phoneNumber": {
+                                "type": "string",
+                                "description": "Additional guest's phone number"
+                              },
+                              "country": {
+                                "type": "string",
+                                "description": "Additional guest's country"
+                              }
+                            }
+                          },
+                          "roomKeys": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "Room key ID"
+                                },
+                                "noOfRooms": {
+                                  "type": "integer",
+                                  "description": "Number of rooms"
+                                }
+                              }
+                            }
+                          },
+                          "userInfo": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "description": "User ID"
+                              },
+                              "firstName": {
+                                "type": "string",
+                                "description": "User's first name"
+                              },
+                              "lastName": {
+                                "type": "string",
+                                "description": "User's last name"
+                              },
+                              "emailAddress": {
+                                "type": "string",
+                                "description": "User's email address"
+                              },
+                              "phoneNumber": {
+                                "type": "string",
+                                "description": "User's phone number"
+                              },
+                              "country": {
+                                "type": "string",
+                                "description": "User's country"
+                              },
+                              "billingAddress": {
+                                "type": "object",
+                                "properties": {
+                                  "zipcode": {
+                                    "type": "string",
+                                    "description": "Billing address ZIP code"
+                                  },
+                                  "address1": {
+                                    "type": "string",
+                                    "description": "Billing address line 1"
+                                  },
+                                  "address2": {
+                                    "type": "string",
+                                    "description": "Billing address line 2"
+                                  },
+                                  "city": {
+                                    "type": "string",
+                                    "description": "Billing address city"
+                                  },
+                                  "state": {
+                                    "type": "string",
+                                    "description": "Billing address state"
+                                  },
+                                  "country": {
+                                    "type": "string",
+                                    "description": "Billing address country"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "roomsInfo": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "description": "Room ID"
+                                },
+                                "roomName": {
+                                  "type": "string",
+                                  "description": "Room name"
+                                },
+                                "minimumNightStays": {
+                                  "type": "integer",
+                                  "description": "Minimum number of nights stay"
+                                },
+                                "maximumOccupancy": {
+                                  "type": "integer",
+                                  "description": "Maximum occupancy"
+                                },
+                                "pricePerNight": {
+                                  "type": "integer",
+                                  "description": "Price per night"
+                                },
+                                "totalNumberOfRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of rooms"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "description": "Room description"
+                                },
+                                "amenities": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "images": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "imageKey": {
+                                        "type": "string",
+                                        "description": "Image key"
+                                      },
+                                      "imagePath": {
+                                        "type": "string",
+                                        "description": "Image path"
+                                      }
+                                    }
+                                  }
+                                },
+                                "totalNumberOfBookedRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of booked rooms"
+                                },
+                                "totalNOfRooms": {
+                                  "type": "integer",
+                                  "description": "Total number of rooms"
+                                },
+                                "iconName": {
+                                  "type": "string",
+                                  "description": "Icon name"
+                                },
+                                "propertyKey": {
+                                  "type": "string",
+                                  "description": "Property key"
+                                },
+                                "roomType": {
+                                  "type": "string",
+                                  "description": "Room type"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/admin/getSavedReports": {
+      "get": {
+         "tags": [
+          "Admin"
+        ],
+        "summary": "Get saved reports",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "reportName": {
+                            "type": "string"
+                          },
+                          "reportType": {
+                            "type": "string"
+                          },
+                          "reportDescription": {
+                            "type": "string"
+                          },
+                          "report": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "date": {
+                                  "type": "string",
+                                  "format": "date"
+                                },
+                                "chargebeforetaxes": {
+                                  "type": "string"
+                                },
+                                "kstandard": {
+                                  "type": "string"
+                                },
+                                "single": {
+                                  "type": "string"
+                                },
+                                "queen": {
+                                  "type": "string"
+                                },
+                                "weeklySingle": {
+                                  "type": "string"
+                                },
+                                "standard": {
+                                  "type": "string"
+                                },
+                                "newtaxtype": {
+                                  "type": "string"
+                                },
+                                "kingsuiteweekly": {
+                                  "type": "string"
+                                },
+                                "doubledaily": {
+                                  "type": "string"
+                                },
+                                "doubleweekly": {
+                                  "type": "string"
+                                },
+                                "singleQueenDaily": {
+                                  "type": "string"
+                                },
+                                "singleQueenWeekly": {
+                                  "type": "string"
+                                },
+                                "taxTotal": {
+                                  "type": "string"
+                                },
+                                "taxExemptTotal": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/admin/getAllProperties":{
+      "get": {
+         "tags": [
+          "Admin"
+        ],
+        "summary": "Get all properties",
+        "responses":{
+           "200": {
+            "description": "Successful response",
+            "content":{
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "data":{
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                         "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "propertyName": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                }
+            }
+          }
+        }
+      }
+    }
+  }
+    },
+    "/admin/getRoomsType":{
+        "get": {
+         "tags": [
+          "Admin"
+        ],
+        "summary": "Get all properties",
+        "responses":{
+           "200": {
+            "description": "Successful response",
+            "content":{
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "data":{
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                         "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "roomType": {
+                            "type": "string"
+                          },
+                           "description": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                }
+            }
+          }
+        }
+      }
+    }
+  }
+    },
+    "/admin/taxReports": {
+      "get": {
+        "tags":[
+          "Admin"
+        ],
+        "summary": "Get tax reports",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "AMOUNT": {
+                            "type": "string"
+                          },
+                          "MTD": {
+                            "type": "string"
+                          },
+                          "TOTAL REVENUE COLUMN": {
+                            "type": "string"
+                          },
+                          "TAXABLE REVENUE COLUMN": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/getAllBookings": {
+      "get": {
+        "tags":[
+          "Admin"
+        ],
+        "summary": "Get all bookings",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "userKey": {
+                            "type": "string"
+                          },
+                          "bookingID": {
+                            "type": "integer"
+                          },
+                          "roomNumber": {
+                            "type": "integer"
+                          },
+                          "noOfRooms": {
+                            "type": "integer"
+                          },
+                          "noOfPerson": {
+                            "type": "integer"
+                          },
+                          "noOfAdults": {
+                            "type": "integer"
+                          },
+                          "noOfChildren": {
+                            "type": "integer"
+                          },
+                          "fairPrice": {
+                            "type": "string"
+                          },
+                          "discount": {
+                            "type": "string"
+                          },
+                          "roomTotal": {
+                            "type": "integer"
+                          },
+                          "totalTax": {
+                            "type": "number"
+                          },
+                          "totalFees": {
+                            "type": "integer"
+                          },
+                          "totalPrice": {
+                            "type": "number"
+                          },
+                          "bookingStatus": {
+                            "type": "string"
+                          },
+                          "paymentStatus": {
+                            "type": "string"
+                          },
+                          "bookingDate": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "checkInDate": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "checkOutDate": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "totalDays": {
+                            "type": "integer"
+                          },
+                          "additionalGuest": {
+                            "type": "object",
+                            "properties": {
+                              "firstName": {
+                                "type": "string"
+                              },
+                              "lastName": {
+                                "type": "string"
+                              },
+                              "emailAddress": {
+                                "type": "string"
+                              },
+                              "phoneNumber": {
+                                "type": "string"
+                              },
+                              "country": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "roomKeys": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "noOfRooms": {
+                                  "type": "integer"
+                                }
+                              }
+                            }
+                          },
+                          "userInfo": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "firstName": {
+                                "type": "string"
+                              },
+                              "lastName": {
+                                "type": "string"
+                              },
+                              "emailAddress": {
+                                "type": "string"
+                              },
+                              "phoneNumber": {
+                                "type": "string"
+                              },
+                              "country": {
+                                "type": "string"
+                              },
+                              "billingAddress": {
+                                "type": "object",
+                                "properties": {
+                                  "zipcode": {
+                                    "type": "string"
+                                  },
+                                  "address1": {
+                                    "type": "string"
+                                  },
+                                  "address2": {
+                                    "type": "string"
+                                  },
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "state": {
+                                    "type": "string"
+                                  },
+                                  "country": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "roomsInfo": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string"
+                                },
+                                "roomName": {
+                                  "type": "string"
+                                },
+                                "minimumNightStays": {
+                                  "type": "integer"
+                                },
+                                "maximumOccupancy": {
+                                  "type": "integer"
+                                },
+                                "pricePerNight": {
+                                  "type": "integer"
+                                },
+                                "totalNumberOfRooms": {
+                                  "type": "integer"
+                                },
+                                "description": {
+                                  "type": "string"
+                                },
+                                "amenities": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "images": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "imageKey": {
+                                        "type": "string"
+                                      },
+                                      "imagePath": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "totalNumberOfBookedRooms": {
+                                  "type": "integer"
+                                },
+                                "totalNOfRooms": {
+                                  "type": "integer"
+                                },
+                                "iconName": {
+                                  "type": "string"
+                                },
+                                "propertyKey": {
+                                  "type": "string"
+                                },
+                                "roomType": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/deleteBooking": {
+      "delete": {
+        "tags":["Admin"],
+        "summary": "Delete a booking",
+        "description": "Deletes a booking by ID",
+      "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "The ID of the booking to delete",
+            "required": true,
+          
+              "type": "string"
+            
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "description": "The status of the operation"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the result"
+                    }
+                  }
+                },
+                "example": {
+                  "status": true,
+                  "message": "Booking Deleted Successfully !"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "The error message"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the result"
+                    },
+                    "status": {
+                      "type": "number",
+                      "description": "The HTTP status code"
+                    }
+                  }
+                },
+                "examples": {
+                  "noIdProvided": {
+                    "value": {
+                      "error": "Bad Request",
+                      "message": "No id provided",
+                      "status": 400
+                    }
+                  },
+                  "idNotExistOrDeleted": {
+                    "value": {
+                      "status": false,
+                      "message": "Id passed does not exist or already deleted"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/admin/getUserById": {
+      "get": {
+        "tags":[
+          "Admin"
+        ],
+        "summary": "Get a user by ID",
+        "description": "Retrieves a user by the provided ID",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "The ID of the user",
+            "required": true,
+            
+              "type": "string"
+            
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "description": "The status of the operation"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "The ID of the user"
+                        },
+                        "firstName": {
+                          "type": "string",
+                          "description": "The first name of the user"
+                        },
+                        "lastName": {
+                          "type": "string",
+                          "description": "The last name of the user"
+                        },
+                        "emailAddress": {
+                          "type": "string",
+                          "description": "The email address of the user"
+                        },
+                        "phoneNumber": {
+                          "type": "string",
+                          "description": "The phone number of the user"
+                        },
+                        "country": {
+                          "type": "string",
+                          "description": "The country of the user"
+                        },
+                        "billingAddress": {
+                          "type": "object",
+                          "properties": {
+                            "zipcode": {
+                              "type": "string",
+                              "description": "The zipcode of the billing address"
+                            },
+                            "address1": {
+                              "type": "string",
+                              "description": "The first line of the billing address"
+                            },
+                            "address2": {
+                              "type": "string",
+                              "description": "The second line of the billing address"
+                            },
+                            "city": {
+                              "type": "string",
+                              "description": "The city of the billing address"
+                            },
+                            "state": {
+                              "type": "string",
+                              "description": "The state of the billing address"
+                            },
+                            "emailAddress": {
+                              "type": "string",
+                              "description": "The email address associated with the billing address"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": true,
+                  "data": {
+                    "_id": "641968087b08e49d7a912cd6",
+                    "firstName": "test",
+                    "lastName": "test",
+                    "emailAddress": "test@yopmail.com",
+                    "phoneNumber": "9874598745",
+                    "country": "Guinea-Bissau",
+                    "billingAddress": {
+                      "zipcode": "98745",
+                      "address1": "test",
+                      "address2": "test",
+                      "city": "test",
+                      "state": "test",
+                      "emailAddress": "test@yopmail.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "The error message"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the result"
+                    },
+                    "status": {
+                      "type": "number",
+                      "description": "The HTTP status code"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Bad Request",
+                  "message": "No id provided",
+                  "status": 400
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "/admin/getReservationById": {
+      "get": {
+            "tags":[
+          "Admin"
+        ],
+        "summary": "Get reservation details by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Reservation ID",
+            "required": true,
+              "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Reservation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+   "/admin/createMaintenance": {
+      "post": {
+        "tags":[
+          "Admin"
+        ],
+        "summary": "Create a maintenance record",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "query",
+            "description": "ID of the property",
+            "required": true,
+            
+              "type": "string"
+            
+          },
+          {
+            "name": "roomTypeId",
+            "in": "query",
+            "description": "ID of the room type",
+            "required": true,
+           
+              "type": "string"
+            
+          },
+          {
+            "name": "roomNumber",
+            "in": "query",
+            "description": "Room number",
+            "required": true,
+            
+              "type": "integer"
+            
+          }
+         
+        ],
+        "responses": {
+          "200": {
+            "description": "Maintenance record creation successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/checkRevenueGrowth14DayMonthly": {
+      "get": {
+        "tags":["Admin"],
+        "summary": "Check revenue growth for the past 14 days (monthly)",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "day": {
+                            "type": "string"
+                          },
+                          "totalPrice": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/getAllRatesAndPlans": {
+      "get": {
+        "tags":["Admin"],
+        "summary": "Get all rates and plans",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "planName": {
+                            "type": "string"
+                          },
+                          "startdate": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "enddate": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "minLos": {
+                            "type": "string"
+                          },
+                          "maxLos": {
+                            "type": "string"
+                          },
+                          "lastMinuteBooking": {
+                            "type": "string"
+                          },
+                          "discountType": {
+                            "type": "string"
+                          },
+                          "discountValue": {
+                            "type": "number"
+                          },
+                          "selectedNumberOfWeeks": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "cutOFf": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/getGuestDetails": {
+      "get": {
+        "tags":["Admin"],
+        "summary": "Get guest details",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "ID of the user",
+            "required": true,
+           
+              "type": "string"
+            
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "firstName": {
+                            "type": "string"
+                          },
+                          "lastName": {
+                            "type": "string"
+                          },
+                          "emailAddress": {
+                            "type": "string",
+                            "format": "email"
+                          },
+                          "phoneNumber": {
+                            "type": "string"
+                          },
+                          "country": {
+                            "type": "string"
+                          },
+                          "billingAddress": {
+                            "type": "object",
+                            "properties": {
+                              "zipcode": {
+                                "type": "string"
+                              },
+                              "address1": {
+                                "type": "string"
+                              },
+                              "address2": {
+                                "type": "string"
+                              },
+                              "city": {
+                                "type": "string"
+                              },
+                              "state": {
+                                "type": "string"
+                              },
+                              "emailAddress": {
+                                "type": "string",
+                                "format": "email"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/deletePlanAndPackage": {
+      "delete": {
+        "tags":["Admin"],
+        "summary": "Delete a plan and package",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "ID of the plan to be deleted",
+            "required": true,
+              "type": "string"
+          }
+        ],
+      
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+ 
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Reservation": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "bookingID": {
+            "type": "integer"
+          },
+          "roomNumber": {
+            "type": "integer"
+          },
+          "noOfRooms": {
+            "type": "integer"
+          },
+          "noOfPerson": {
+            "type": "integer"
+          },
+          "noOfAdults": {
+            "type": "integer"
+          },
+          "noOfChildren": {
+            "type": "integer"
+          },
+          "fairPrice": {
+            "type": "string"
+          },
+          "discount": {
+            "type": "string"
+          },
+          "roomTotal": {
+            "type": "integer"
+          },
+          "totalTax": {
+            "type": "number"
+          },
+          "totalFees": {
+            "type": "integer"
+          },
+          "totalPrice": {
+            "type": "number"
+          },
+          "bookingStatus": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "type": "string"
+          },
+          "bookingDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "checkInDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "checkOutDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "totalDays": {
+            "type": "integer"
+          },
+          "additionalGuest": {
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "emailAddress": {
+                "type": "string",
+                "format": "email"
+              },
+              "phoneNumber": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            }
+          },
+          "roomKeys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "noOfRooms": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "userInfo": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "emailAddress": {
+                "type": "string",
+                "format": "email"
+              },
+              "phoneNumber": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              },
+              "billingAddress": {
+                "type": "object",
+                "properties": {
+                  "zipcode": {
+                    "type": "string"
+                  },
+                  "address1": {
+                    "type": "string"
+                  },
+                  "address2": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "roomsInfo": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "roomName": {
+                  "type": "string"
+                },
+                "minimumNightStays": {
+                  "type": "integer"
+                },
+                "maximumOccupancy": {
+                  "type": "integer"
+                },
+                "pricePerNight": {
+                  "type": "integer"
+                },
+                "totalNumberOfRooms": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "amenities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "images": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "imageKey": {
+                        "type": "string"
+                      },
+                      "imagePath": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "totalNumberOfBookedRooms": {
+                  "type": "integer"
+                },
+                "totalNOfRooms": {
+                  "type": "integer"
+                },
+                "iconName": {
+                  "type": "string"
+                },
+                "propertyKey": {
+                  "type": "string"
+                },
+                "roomType": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+
+
+  },
+  "components": {
+    "schemas": {
+      "SummaryReportResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SummaryReportData"
+            }
+          }
+        }
+      },
+      "AvailableRoomsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "Double Smoking": {
+                  "type": "integer"
+                },
+                "Double Non Smoking": {
+                  "type": "integer"
+                },
+                "Deluxe": {
+                  "type": "integer"
+                },
+                "Twin": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SummaryReportData": {
+        "type": "object",
+        "properties": {
+          "SellingDate": {
+            "type": "string"
+          },
+          "Bookings": {
+            "type": "string"
+          },
+          "RevPAR": {
+            "type": "string"
+          },
+          "ADR": {
+            "type": "string"
+          },
+          "RoomChargesBeforeTax": {
+            "type": "string"
+          },
+          "AllCharges": {
+            "type": "string"
+          },
+          "AllPayments": {
+            "type": "integer"
+          },
+          "Balance": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+   "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          }
+        }
+      },
+      "ErrorBadRequest": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          }
+        }
+      },
+      "ErrorNotFound": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+ "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "definitions": {
+    "Room": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "roomName": {
+          "type": "string"
+        },
+        "minimumNightStays": {
+          "type": "integer"
+        },
+        "maximumOccupancy": {
+          "type": "integer"
+        },
+        "pricePerNight": {
+          "type": "integer"
+        },
+        "totalNumberOfRooms": {
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "amenities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "imageKey": {
+                "type": "string"
+              },
+              "imagePath": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "totalNumberOfBookedRooms": {
+          "type": "integer"
+        },
+        "totalNOfRooms": {
+          "type": "integer"
+        },
+        "iconName": {
+          "type": "string"
+        },
+        "propertyKey": {
+          "type": "string"
+        },
+        "roomType": {
+          "type": "string"
+        }
+      }
+    },
+  "Property": {
+    "type": "object",
+    "properties": {
+      "_id": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "propertyName": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "city": {
+        "type": "string"
+      },
+      "postalCode": {
+        "type": "string"
+      },
+      "contactName": {
+        "type": "string"
+      },
+      "phone": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "mapUrl": {
+        "type": "string"
+      },
+      "amenities": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "checkInCheckOutPolicies": {
+        "type": "object",
+        "properties": {
+          "CheckIn": {
+            "type": "string"
+          },
+          "CheckOut": {
+            "type": "string"
+          },
+          "lateCheckOutHour": {
+            "type": "string"
+          },
+          "lateCheckOutFees": {
+            "type": "string"
+          },
+          "propertyAndCancellationPolicies": {
+            "type": "string"
+          }
+        }
+      },
+      "termsAndConditions": {
+        "type": "string"
+      }
+    }
+  },
+  "Country": {
+    "type": "object",
+    "properties": {
+      "_id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      }
+    }
+  },
+  "AdminLoginRequest": {
+    "type": "object",
+    "properties": {
+      "email": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      }
+    }
+  },
+  "User": {
+    "type": "object",
+    "properties": {
+      "_id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "otp": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      }
+    }
+  },
+  "FinancialReportResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "roomRevenue": {
+              "type": "object",
+              "properties": {
+                "today": {
+                  "$ref": "#/definitions/RoomRevenueData"
+                },
+                "monthToDate": {
+                  "$ref": "#/definitions/RoomRevenueData"
+                }
+              }
+            },
+            "statistics": {
+              "type": "object",
+              "properties": {
+                "today": {
+                  "$ref": "#/definitions/StatisticsData"
+                },
+                "monthTodate": {
+                  "$ref": "#/definitions/StatisticsData"
+                }
+              }
+            },
+            "booksForecast": {
+              "type": "object",
+              "properties": {
+                "totalRoomsOccupiedformonth": {
+                  "type": "integer"
+                },
+                "occupancyForWholeMonth": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "AdrForWholeMonth": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "totalRoomRevenueWholeMonth": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "revparForWholeMonth": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            },
+            "occupancy": {
+              "type": "object",
+              "properties": {
+                "todaydata": {
+                  "$ref": "#/definitions/OccupancyData"
+                },
+                "wholemonthdata": {
+                  "$ref": "#/definitions/OccupancyData"
+                }
+              }
+            }
+          },
+          "required": [
+            "roomRevenue",
+            "statistics",
+            "booksForecast",
+            "occupancy"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "RoomRevenueData": {
+      "type": "object",
+      "properties": {
+        "adrforgivendate": {
+          "type": "string"
+        },
+        "roomrevenue": {
+          "type": "number",
+          "format": "float"
+        },
+        "revpargivendate": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+         "required": [
+        "adrforgivendate",
+        "roomrevenue",
+        "revpargivendate"
+      ]
+      
+    },
+    "StatisticsData": {
+      "type": "object",
+      "properties": {
+        "totalGuests": {
+          "type": "integer"
+        },
+        "totalCheckIns": {
+          "type": "integer"
+        },
+        "totalCheckOuts": {
+          "type": "integer"
+        },
+        "walkInforGivenDate": {
+          "type": "integer"
+        },
+        "avglostotalnightsgivendate": {
+          "type": "number",
+          "format": "float"
+        },
+        "avgLosForgivendate": {
+          "type": "number",
+          "format": "float"
+        },
+        "adrforgivendateperguest": {
+          "type": "number",
+          "format": "float"
+        },
+        "totalrevenueforgivendate": {
+          "type": "number",
+          "format": "float"
+        },
+        "paymentForGivenDate": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+        "required": [
+        "totalGuests",
+        "totalCheckIns",
+        "totalCheckOuts",
+        "walkInforGivenDate",
+        "avglostotalnightsgivendate",
+        "avgLosForgivendate",
+        "adrforgivendateperguest",
+        "totalrevenueforgivendate",
+        "paymentForGivenDate"
+      ]
+
+    },
+    "OccupancyData": {
+      "type": "object",
+      "properties": {
+        "availableRooms": {
+          "type": "number",
+          "format": "float"
+        },
+        "percentageofroomsinmaintenance": {
+          "type": "number",
+          "format": "float"
+        },
+        "percentageofRoomsBooked": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "required": [
+        "availableRooms",
+        "percentageofroomsinmaintenance",
+        "percentageofRoomsBooked"
+      ]
+
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
